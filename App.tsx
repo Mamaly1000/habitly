@@ -1,37 +1,37 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
+import ProgressBar from './src/components/ui/ProgressBar';
+import { mockHabits, HabitType } from './src/types/habit';
+import HabitCard from './src/components/ui/HabitCard';
+import { useState } from 'react';
 
 export default function App() {
-  const habits = [
-    { id: 1, name: 'Walk a dog', description: 'Walk with your dog', completed: true },
-    {
-      id: 2,
-      name: 'Eat breakfast',
-      description: 'Eat a healthy breakfast',
-      completed: false,
-    },
-    { id: 3, name: 'Drink 2L water', description: 'Drink 2L of water', completed: false },
-  ];
+  const [habits, setHabits] = useState<HabitType[]>(mockHabits);
+
+  const onAddHabit = () => {
+    setHabits((p) => [
+      ...p,
+      {
+        completed: false,
+        description: 'this is new added habit',
+        id: Math.random(),
+        name: 'new habit name',
+      },
+    ]);
+  };
 
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View>
-          <Text style={styles.progressTitle}>Todays's progress</Text>
-          <Text style={styles.progressSubtitle}>2 of 3 completed</Text>
-        </View>
-        <View>
-          <Text style={styles.title}>66%</Text>
-        </View>
-        <View style={{ height: 10, marginTop: 10, backgroundColor: '#334155', borderRadius: 10 }}>
-          <View
-            style={[
-              { height: '100%', borderRadius: 10, backgroundColor: '#10B981' },
-              { width: '66%' },
-            ]}
-          />
-        </View>
+        <ProgressBar
+          completedCount={
+            habits.filter((habit) => {
+              return habit.completed;
+            }).length
+          }
+          totalCount={habits.length}
+        />
         <View
           style={{
             display: 'flex',
@@ -53,35 +53,36 @@ export default function App() {
               style={({ pressed }) => [styles.addButton, pressed && styles.addButtonPressed]}
               accessibilityRole="button"
               accessibilityLabel="add new habit"
-              onPress={() => {
-                console.log('add habit pressed!');
-              }}
+              onPress={onAddHabit}
             >
               <Text style={styles.addButtonText}>+ Add New Habit</Text>
             </Pressable>
           </View>
-          {habits.map((habit) => (
-            <View key={habit.id} style={styles.habitCard}>
-              <View style={styles.habitInfo}>
-                <Text style={[styles.habitTitle, habit.completed && styles.habitTitleCompleted]}>
-                  {habit.name}
-                </Text>
-                <Text style={styles.habitDescription}>{habit.description}</Text>
-              </View>
-              <Pressable
-                style={({ pressed }) => [
-                  styles.checkbox,
-                  pressed && styles.checkboxPressed,
-                  habit.completed && styles.checkboxCompleted,
-                ]}
-                hitSlop={10}
-                accessibilityRole="checkbox"
-                accessibilityState={{ checked: habit.completed }}
-              >
-                <Text style={styles.checkmarkText}>{habit.completed ? '✓' : ''}</Text>
-              </Pressable>
+          {habits.length === 0 ? (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyTitle}>No habits yet</Text>
+              <Text style={styles.emptySubtitle}>
+                Tap "+ Add New Habit" to create your first one!
+              </Text>
             </View>
-          ))}
+          ) : (
+            habits.map((habit) => (
+              <HabitCard
+                key={habit.id}
+                habit={habit}
+                onToggle={(id) => {
+                  const updatedHabit = habits.find((h) => h.id === id);
+                  if (updatedHabit) {
+                    setHabits((p) =>
+                      p.map((h) =>
+                        h.id === updatedHabit.id ? { ...h, completed: !h.completed } : h
+                      )
+                    );
+                  }
+                }}
+              />
+            ))
+          )}
         </View>
       </ScrollView>
     </View>
@@ -176,4 +177,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
   },
+  emptyContainer: {},
+  emptyTitle: {},
+  emptySubtitle: {},
 });
