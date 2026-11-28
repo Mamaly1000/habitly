@@ -1,8 +1,8 @@
 # Habitly — Implementation Plan
 
 **Document:** Implementation Plan & Technical Architecture  
-**Status:** Stage 0 Completed & Verified — Ready for Stage 1 Execution  
-**Date:** 2026-11-24  
+**Status:** Stage 1 Completed & Verified — Ready for Stage 2 Execution  
+**Date:** 2026-11-27  
 **Target Repository:** `c:\Users\mamaly\Desktop\habitly`  
 **Reference Documents:** `docs/SPEC.md`, `docs/DECISIONS.md`, `docs/ROADMAP.md`, `AGENTS.md`, `agent/development-policies.md`
 
@@ -87,14 +87,15 @@ Development proceeds strictly one stage at a time. Each stage has a versioned sp
 
 ---
 
-### Stage 1: React Native Fundamentals — [PLANNED / NEXT UP]
+### Stage 1: React Native Fundamentals — [COMPLETED]
 - **Specification:** [`agent/stages/stage-1/stage-1-v1.md`](../stages/stage-1/stage-1-v1.md)
+- **Completion Report:** [`agent/reports/report-1/report-1-v1.md`](report-1/report-1-v1.md)
 - **Objective:** Understand `View`, `Text`, `Pressable`, `ScrollView`, `StyleSheet`, and Flexbox. Build static Habitly Home Screen with greeting, progress card, 3 sample habit cards, and "Add Habit" button.
-- **Gate:** Static Home screen renders cleanly on Android with proper spacing, readable typography, and correct touch targets.
+- **Gate:** Static Home screen renders cleanly with proper spacing, readable typography, and correct touch targets. (PASSED)
 
 ---
 
-### Stage 2: Components & State Management — [PLANNED]
+### Stage 2: Components & State Management — [NEXT UP]
 - **Specification:** [`agent/stages/stage-2/stage-2-v1.md`](../stages/stage-2/stage-2-v1.md)
 - **Objective:** Extract reusable components (`HabitCard`, `HabitList`, `ProgressCard`). Implement dynamic in-memory state with `useState`. Enable tapping habits to toggle completion and dynamically recalculate progress.
 - **Gate:** User can interactively toggle habit completion; progress percentage updates reactively.
